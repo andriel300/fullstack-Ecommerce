@@ -9,6 +9,17 @@ import { shades } from "../../theme";
 import { addToCart } from "../../state";
 import { useParams } from "react-router-dom";
 import Item from "../../components/Item";
+import { keyframes } from "@emotion/react";
+
+// Define the animation
+const growAnimation = keyframes`
+  from {
+    transform: scale(1);
+  }
+  to {
+    transform: translateX(-2%) translateY(-2%);
+  }
+`;
 
 const ItemDetails = () => {
   const dispatch = useDispatch();
@@ -17,6 +28,7 @@ const ItemDetails = () => {
   const [count, setCount] = useState(1);
   const [item, setItem] = useState(null);
   const [items, setItems] = useState([]);
+  const [isImageHovered, setIsImageHovered] = useState(false);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -56,7 +68,15 @@ const ItemDetails = () => {
             width="100%"
             height="100%"
             src={`http://localhost:1337${item?.attributes?.image?.data?.attributes?.formats?.medium?.url}`}
-            style={{ objectFix: "contain" }}
+            style={{
+              objectFit: "contain",
+              cursor: "pointer",
+              animation: isImageHovered
+                ? `${growAnimation} 0.25s ease-in-out`
+                : "",
+            }}
+            onMouseEnter={() => setIsImageHovered(true)}
+            onMouseLeave={() => setIsImageHovered(false)}
           />
         </Box>
 
